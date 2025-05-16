@@ -1,4 +1,6 @@
 import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
+import { Svg } from './_interfaces/svg';
+import { Rectangle } from './_interfaces/rectangle';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +11,10 @@ import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 export class AppComponent {
   @ViewChild('canvasControl', { static: true }) canvasControl: ElementRef;
 
-  public maxElements: number = 2;
+  private svgProps: Svg[] = [{ "height": '200' }, { "width": '300' }, { "viewBox": '0 0 300 200' }];
+  private rectProps: Rectangle[] = [{ "x": "100" }, { "y": "50" }, { "height": "100" }, { "width": "150" }];
+
+  public maxElements: number = 3;
   public elementsCounter: number = 0;
 
   constructor(private renderer: Renderer2) { }
@@ -34,20 +39,23 @@ export class AppComponent {
 
     let content = this.canvasControl.nativeElement.querySelector('svg');
 
-    if (!content) {
-      content = this.renderer.createElement('svg', 'svg');
-      this.renderer.setAttribute(content, 'width', '300');
-      this.renderer.setAttribute(content, 'height', '200');
-      this.renderer.setAttribute(content, 'viewBox', '0 0 300 200');
-      this.renderer.appendChild(this.canvasControl.nativeElement, content);
-    }
+    content = this.renderer.createElement('svg', 'svg');
+
+    this.svgProps.forEach(obj => {
+      const key = Object.keys(obj)[0] as keyof Svg;
+      const value = obj[key] as string;
+      this.renderer.setAttribute(content, key, value);
+    });
+
+    this.renderer.appendChild(this.canvasControl.nativeElement, content);
 
     const rectangle = this.renderer.createElement('rect', 'svg');
 
-    this.renderer.setAttribute(rectangle, 'x', this.generateRandomPosition(250).toString());
-    this.renderer.setAttribute(rectangle, 'y', this.generateRandomPosition(150).toString());
-    this.renderer.setAttribute(rectangle, 'width', '100');
-    this.renderer.setAttribute(rectangle, 'height', '100');
+    this.rectProps.forEach(obj => {
+      const key = Object.keys(obj)[0] as keyof Rectangle;
+      const value = obj[key] as string;
+      this.renderer.setAttribute(rectangle, key, value);
+    });
 
     this.renderer.appendChild(content, rectangle);
 
