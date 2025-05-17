@@ -16,6 +16,7 @@ export class AppComponent {
   private svgProps: Svg[] = [{ "height": '200' }, { "width": '300' }, { "viewBox": '0 0 300 200' }];
   private rectProps: Rectangle[] = [{ 'id': `element-${this.rectCounter++}` }, { "height": "100" }, { "width": "150" }, { "x": "100" }, { "y": "50" }];
 
+  public fillRectangle: string;
   public verticalBorder = '0';
   public selectedRectId: string | null = null;
   public horizontalBorder = '0';
@@ -58,6 +59,7 @@ export class AppComponent {
       this.renderer.removeChild(content, content.firstChild)
     }
 
+    this.fillRectangle = '#000000';
     this.showElementControls = false;
     this.elementsCounter = 0;
   }
@@ -109,6 +111,15 @@ export class AppComponent {
     if (element) {
       this.renderer.setAttribute(element, 'rx', this.horizontalBorder);
       this.renderer.setAttribute(element, 'ry', this.verticalBorder);
+    }
+  }
+
+  public changeRectangleColor() {
+    if (!this.selectedRectId) return;
+
+    const element = document.getElementById(this.selectedRectId);
+    if (element) {
+      this.renderer.setAttribute(element, 'fill', this.fillRectangle);
     }
   }
 
