@@ -11,16 +11,45 @@ import { Rectangle } from './_interfaces/rectangle';
 export class AppComponent {
   @ViewChild('canvasControl', { static: true }) canvasControl: ElementRef;
 
-  private svgProps: Svg[] = [{ "height": '200' }, { "width": '300' }, { "viewBox": '0 0 300 200' }];
-  private rectProps: Rectangle[] = [{ "x": "100" }, { "y": "50" }, { "height": "100" }, { "width": "150" }];
+  public rectCounter = 0;
 
-  public maxElements: number = 3;
-  public elementsCounter: number = 0;
+  private svgProps: Svg[] = [{ "height": '200' }, { "width": '300' }, { "viewBox": '0 0 300 200' }];
+  private rectProps: Rectangle[] = [{ 'id': `element-${this.rectCounter++}` }, { "height": "100" }, { "width": "150" }, { "x": "100" }, { "y": "50" }];
+
+  public verticalBorder = '0';
+  public selectedRectId: string | null = null;
+  public horizontalBorder = '0';
+
+  public elementsCounter = 0;
+  public maxElements = 3;
+
+  public showElementControls = false;
 
   constructor(private renderer: Renderer2) { }
 
-  private generateRandomPosition(max: number): number {
-    return Math.floor(Math.random() * max);
+  private selectRectangle(id: string) {
+    if (this.selectedRectId) {
+      const prevRect = document.getElementById(this.selectedRectId);
+      if (prevRect) {
+        this.renderer.setStyle(prevRect, 'stroke', null);
+        this.renderer.setStyle(prevRect, 'stroke-width', null);
+      }
+    }
+
+    this.selectedRectId = id;
+
+    const rect = document.getElementById(id);
+    if (rect) {
+      this.renderer.setStyle(rect, 'stroke', 'red');
+      this.renderer.setStyle(rect, 'stroke-width', '3');
+
+      const rx = rect.getAttribute('rx') || '0';
+      const ry = rect.getAttribute('ry') || '0';
+      this.horizontalBorder = rx;
+      this.verticalBorder = ry;
+    }
+
+    this.showElementControls = true;
   }
 
   public clearCanvas() {
@@ -29,6 +58,7 @@ export class AppComponent {
       this.renderer.removeChild(content, content.firstChild)
     }
 
+    this.showElementControls = false;
     this.elementsCounter = 0;
   }
 
@@ -49,6 +79,7 @@ export class AppComponent {
 
     this.renderer.appendChild(this.canvasControl.nativeElement, content);
 
+    const rectId = `element-${this.rectCounter++}`;
     const rectangle = this.renderer.createElement('rect', 'svg');
 
     this.rectProps.forEach(obj => {
@@ -57,9 +88,28 @@ export class AppComponent {
       this.renderer.setAttribute(rectangle, key, value);
     });
 
+    this.renderer.setAttribute(rectangle, 'id', rectId);
+
+    this.renderer.listen(rectangle, 'click', (event) => {
+      event.stopPropagation();
+      this.selectRectangle(rectId);
+    });
+
     this.renderer.appendChild(content, rectangle);
 
     this.elementsCounter++;
+
+    this.selectRectangle(rectId);
+  }
+
+  public editRectangleBorder() {
+    if (!this.selectedRectId) return;
+
+    const element = document.getElementById(this.selectedRectId);
+    if (element) {
+      this.renderer.setAttribute(element, 'rx', this.horizontalBorder);
+      this.renderer.setAttribute(element, 'ry', this.verticalBorder);
+    }
   }
 
   public createStars() {

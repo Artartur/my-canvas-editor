@@ -5,5 +5,14 @@
     <button type="button" (click)="createRectangle()">Adicionar Retângulo</button>
     <button type="button" (click)="createStars()">Adicionar Estrela</button>
     <button type="button" (click)="clearCanvas()">Limpar</button>
+  <div class="container-element-controls" *ngIf="showElementControls">
+    <div>
+      <label for="horizontalBorder">Arredondar borda na horizontal</label>
+      <input type="number" name="horizontalBorder" id="horizontalBorder" max="100" min="0" [(ngModel)]="horizontalBorder" (ngModelChange)="editRectangleBorder()"/>
+    </div>
+    <div>
+      <label for="verticalBorder">Arredondar borda na vertical</label>
+      <input type="number" name="verticalBorder" id="verticalBorder" max="100" min="0" [(ngModel)]="verticalBorder" (ngModelChange)="editRectangleBorder()"/>
+    </div>
   </div>
 </div>
