@@ -1,10 +1,13 @@
 <div class="container">
-  <div class="container-content" #canvasControl>
+  <div class="container-content">
+    <div class="container-content-canvas" #canvasControl>
+    </div>
+    <div class="container-content-buttons">
+      <button type="button" (click)="createRectangle()">Adicionar Retângulo</button>
+      <button type="button" (click)="createStar()">Adicionar Estrela</button>
+      <button type="button" (click)="clearCanvas()">Limpar</button>
+    </div>
   </div>
-  <div class="container-buttons">
-    <button type="button" (click)="createRectangle()">Adicionar Retângulo</button>
-    <button type="button" (click)="createStars()">Adicionar Estrela</button>
-    <button type="button" (click)="clearCanvas()">Limpar</button>
   <div class="container-element-controls" *ngIf="showElementControls">
     <div>
       <label for="horizontalBorder">Arredondar borda na horizontal</label>
