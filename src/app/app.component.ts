@@ -123,25 +123,27 @@ export class AppComponent {
     }
   }
 
-  public createStars() {
+  public createStar() {
     if (this.elementsCounter >= this.maxElements) {
       return;
     }
 
     let content = this.canvasControl.nativeElement.querySelector('svg');
 
-    if (!content) {
-      content = this.renderer.createElement('svg', 'svg');
-      this.renderer.setAttribute(content, 'width', '300');
-      this.renderer.setAttribute(content, 'height', '300');
-      this.renderer.setAttribute(content, 'viewBox', '0 0 300 300');
-      this.renderer.appendChild(this.canvasControl.nativeElement, content);
-    }
+    content = this.renderer.createElement('svg', 'svg');
+
+    this.svgProps.forEach(obj => {
+      const key = Object.keys(obj)[0] as keyof Svg;
+      const value = obj[key] as string;
+      this.renderer.setAttribute(content, key, value);
+    });
+
+    this.renderer.appendChild(this.canvasControl.nativeElement, content);
 
     const polygon = this.renderer.createElement('polygon', 'svg');
 
     this.renderer.setAttribute(polygon, 'points', '150,25 179,111 270,111 196,165 223,251 150,200 77,251 104,165 30,111 121,111');
-    this.renderer.setAttribute(polygon, 'transform', `translate(${this.generateRandomPosition(300 - 75)},${this.generateRandomPosition(300 - 75)}) scale(0.5)`);
+    this.renderer.setAttribute(polygon, 'transform', `scale(0.5)`);
     this.renderer.appendChild(content, polygon);
 
     this.elementsCounter++;
