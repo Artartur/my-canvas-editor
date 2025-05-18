@@ -11,20 +11,20 @@ import { Rectangle } from './_interfaces/rectangle';
 export class AppComponent {
   @ViewChild('canvasControl', { static: true }) canvasControl: ElementRef;
 
-  public rectCounter = 0;
+  private selectedRectId: string | null = null;
 
-  private svgProps: Svg[] = [{ "height": '200' }, { "width": '300' }, { "viewBox": '0 0 300 200' }];
+  private elementsCounter = 0;
+  private maxElements = 3;
+  private rectCounter = 0;
+
   private rectProps: Rectangle[] = [{ 'id': `element-${this.rectCounter++}` }, { "height": "100" }, { "width": "150" }, { "x": "100" }, { "y": "50" }];
+  private svgProps: Svg[] = [{ "height": '200' }, { "width": '300' }, { "viewBox": '0 0 300 200' }];
 
-  public fillRectangle: string;
-  public verticalBorder = '0';
-  public selectedRectId: string | null = null;
+  public fillRectangle = '';
   public horizontalBorder = '0';
+  public verticalBorder = '0';
 
-  public elementsCounter = 0;
-  public maxElements = 3;
-
-  public showElementControls = false;
+  public showRectangleControls = false;
 
   constructor(private renderer: Renderer2) { }
 
@@ -50,7 +50,7 @@ export class AppComponent {
       this.verticalBorder = ry;
     }
 
-    this.showElementControls = true;
+    this.showRectangleControls = true;
   }
 
   public clearCanvas() {
@@ -60,7 +60,7 @@ export class AppComponent {
     }
 
     this.fillRectangle = '#000000';
-    this.showElementControls = false;
+    this.showRectangleControls = false;
     this.elementsCounter = 0;
   }
 
@@ -104,25 +104,6 @@ export class AppComponent {
     this.selectRectangle(rectId);
   }
 
-  public editRectangleBorder() {
-    if (!this.selectedRectId) return;
-
-    const element = document.getElementById(this.selectedRectId);
-    if (element) {
-      this.renderer.setAttribute(element, 'rx', this.horizontalBorder);
-      this.renderer.setAttribute(element, 'ry', this.verticalBorder);
-    }
-  }
-
-  public changeRectangleColor() {
-    if (!this.selectedRectId) return;
-
-    const element = document.getElementById(this.selectedRectId);
-    if (element) {
-      this.renderer.setAttribute(element, 'fill', this.fillRectangle);
-    }
-  }
-
   public createStar() {
     if (this.elementsCounter >= this.maxElements) {
       return;
@@ -147,5 +128,24 @@ export class AppComponent {
     this.renderer.appendChild(content, polygon);
 
     this.elementsCounter++;
+  }
+
+  public editRectangleBorder() {
+    if (!this.selectedRectId) return;
+
+    const element = document.getElementById(this.selectedRectId);
+    if (element) {
+      this.renderer.setAttribute(element, 'rx', this.horizontalBorder);
+      this.renderer.setAttribute(element, 'ry', this.verticalBorder);
+    }
+  }
+
+  public editRectangleColor() {
+    if (!this.selectedRectId) return;
+
+    const element = document.getElementById(this.selectedRectId);
+    if (element) {
+      this.renderer.setAttribute(element, 'fill', this.fillRectangle);
+    }
   }
 }

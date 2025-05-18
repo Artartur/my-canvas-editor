@@ -8,7 +8,7 @@
       <button type="button" (click)="clearCanvas()">Limpar</button>
     </div>
   </div>
-  <div class="container-element-controls" *ngIf="showElementControls">
+  <div class="container-rectangle-controls" *ngIf="showRectangleControls">
     <div>
       <label for="horizontalBorder">Arredondar borda na horizontal</label>
       <input type="number" name="horizontalBorder" id="horizontalBorder" max="100" min="0" [(ngModel)]="horizontalBorder" (ngModelChange)="editRectangleBorder()"/>
@@ -19,7 +19,7 @@
     </div>
     <div>
       <label for="fillRectangle">Escolha uma cor</label>
-      <input type="color" name="fillRectangle" id="fillRectangle" [(ngModel)]="fillRectangle" (ngModelChange)="changeRectangleColor()"/>
+      <input type="color" name="fillRectangle" id="fillRectangle" [(ngModel)]="fillRectangle" (ngModelChange)="editRectangleColor()"/>
     </div>
   </div>
 </div>
