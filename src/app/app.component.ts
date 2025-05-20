@@ -34,6 +34,23 @@ export class AppComponent {
 
   constructor(private renderer: Renderer2) { }
 
+  private clearPreviousSelection() {
+    if (this.selectedRectId || this.selectedPolyId) {
+      const prevRect = document.getElementById(this.selectedRectId as string);
+      const prevPoly = document.getElementById(this.selectedPolyId as string);
+
+      if (prevRect) {
+        this.renderer.setStyle(prevRect, 'stroke', null);
+        this.renderer.setStyle(prevRect, 'stroke-width', null);
+      }
+
+      if (prevPoly) {
+        this.renderer.setStyle(prevPoly, 'stroke', null);
+        this.renderer.setStyle(prevPoly, 'stroke-width', null);
+      }
+    }
+  }
+
   private generateStarPoints(centerX: number, centerY: number, points: number, outerRadius: number, innerRadius: number): string {
     let result = '';
     const angleStep = Math.PI / points;
@@ -52,13 +69,7 @@ export class AppComponent {
   }
 
   private selectRectangle(id: string) {
-    if (this.selectedRectId) {
-      const prevRect = document.getElementById(this.selectedRectId);
-      if (prevRect) {
-        this.renderer.setStyle(prevRect, 'stroke', null);
-        this.renderer.setStyle(prevRect, 'stroke-width', null);
-      }
-    }
+    this.clearPreviousSelection();
 
     this.selectedRectId = id;
 
@@ -79,13 +90,7 @@ export class AppComponent {
   }
 
   private selectStar(id: string) {
-    if (this.selectedPolyId) {
-      const prevPoly = document.getElementById(this.selectedPolyId);
-      if (prevPoly) {
-        this.renderer.setStyle(prevPoly, 'stroke', null);
-        this.renderer.setStyle(prevPoly, 'stroke-width', null);
-      }
-    }
+    this.clearPreviousSelection();
 
     this.selectedPolyId = id;
 
