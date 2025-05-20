@@ -11,22 +11,45 @@ import { Rectangle } from './_interfaces/rectangle';
 export class AppComponent {
   @ViewChild('canvasControl', { static: true }) canvasControl: ElementRef;
 
+  private selectedPolyId: string | null = null;
   private selectedRectId: string | null = null;
 
   private elementsCounter = 0;
   private maxElements = 3;
+  private polygonCounter = 0;
   private rectCounter = 0;
 
   private rectProps: Rectangle[] = [{ 'id': `element-${this.rectCounter++}` }, { "height": "100" }, { "width": "150" }, { "x": "100" }, { "y": "50" }];
   private svgProps: Svg[] = [{ "height": '200' }, { "width": '300' }, { "viewBox": '0 0 300 200' }];
 
   public fillRectangle = '';
+  public fillStar = '';
   public horizontalBorder = '0';
   public verticalBorder = '0';
 
+  public starPoints = 5;
+
   public showRectangleControls = false;
+  public showStarControls = false;
 
   constructor(private renderer: Renderer2) { }
+
+  private generateStarPoints(centerX: number, centerY: number, points: number, outerRadius: number, innerRadius: number): string {
+    let result = '';
+    const angleStep = Math.PI / points;
+
+    for (let i = 0; i < points * 2; i++) {
+      const radius = i % 2 === 0 ? outerRadius : innerRadius;
+      const angle = i * angleStep;
+
+      const x = centerX + radius * Math.sin(angle);
+      const y = centerY - radius * Math.cos(angle);
+
+      result += `${x},${y} `;
+    }
+
+    return result.trim();
+  }
 
   private selectRectangle(id: string) {
     if (this.selectedRectId) {
@@ -41,6 +64,7 @@ export class AppComponent {
 
     const rect = document.getElementById(id);
     if (rect) {
+      this.renderer.setStyle(rect, 'cursor', 'pointer');
       this.renderer.setStyle(rect, 'stroke', 'red');
       this.renderer.setStyle(rect, 'stroke-width', '3');
 
@@ -51,6 +75,30 @@ export class AppComponent {
     }
 
     this.showRectangleControls = true;
+    this.showStarControls = false;
+  }
+
+  private selectStar(id: string) {
+    if (this.selectedPolyId) {
+      const prevPoly = document.getElementById(this.selectedPolyId);
+      if (prevPoly) {
+        this.renderer.setStyle(prevPoly, 'stroke', null);
+        this.renderer.setStyle(prevPoly, 'stroke-width', null);
+      }
+    }
+
+    this.selectedPolyId = id;
+
+    const poly = document.getElementById(id);
+
+    if (poly) {
+      this.renderer.setStyle(poly, 'cursor', 'pointer');
+      this.renderer.setStyle(poly, 'stroke', 'red');
+      this.renderer.setStyle(poly, 'stroke-width', '3');
+    }
+
+    this.showRectangleControls = false;
+    this.showStarControls = true;
   }
 
   public clearCanvas() {
@@ -60,7 +108,9 @@ export class AppComponent {
     }
 
     this.fillRectangle = '#000000';
+    this.fillStar = '#000000';
     this.showRectangleControls = false;
+    this.showStarControls = false;
     this.elementsCounter = 0;
   }
 
@@ -104,10 +154,12 @@ export class AppComponent {
     this.selectRectangle(rectId);
   }
 
-  public createStar() {
+  public createStar(numPoints?: number) {
     if (this.elementsCounter >= this.maxElements) {
       return;
     }
+
+    const points = numPoints || this.starPoints;
 
     let content = this.canvasControl.nativeElement.querySelector('svg');
 
@@ -121,13 +173,24 @@ export class AppComponent {
 
     this.renderer.appendChild(this.canvasControl.nativeElement, content);
 
+    const polyId = `element-${this.polygonCounter++}`;
     const polygon = this.renderer.createElement('polygon', 'svg');
+    this.renderer.setAttribute(polygon, 'id', polyId);
 
-    this.renderer.setAttribute(polygon, 'points', '150,25 179,111 270,111 196,165 223,251 150,200 77,251 104,165 30,111 121,111');
+    const pointsStr = this.generateStarPoints(150, 150, points, 125, 50);
+    this.renderer.setAttribute(polygon, 'points', pointsStr);
     this.renderer.setAttribute(polygon, 'transform', `scale(0.5)`);
+
+    this.renderer.listen(polygon, 'click', (event) => {
+      event.stopPropagation();
+      this.selectStar(polyId);
+    })
+
     this.renderer.appendChild(content, polygon);
 
     this.elementsCounter++;
+
+    this.selectStar(polyId);
   }
 
   public editRectangleBorder() {
@@ -146,6 +209,30 @@ export class AppComponent {
     const element = document.getElementById(this.selectedRectId);
     if (element) {
       this.renderer.setAttribute(element, 'fill', this.fillRectangle);
+    }
+  }
+
+  public editStarColor() {
+    if (!this.selectedPolyId) return;
+
+    const element = document.getElementById(this.selectedPolyId);
+    if (element) {
+      this.renderer.setAttribute(element, 'fill', this.fillStar);
+    }
+  }
+
+  public editStarPoints(event: Event) {
+    if (!this.selectedPolyId) return;
+
+    const inputElement = event.target as HTMLInputElement;
+    const points = +inputElement.value;
+
+    const element = document.getElementById(this.selectedPolyId);
+
+    if (element) {
+      const newPoints = this.generateStarPoints(150, 150, points, 125, 50);
+      this.renderer.setAttribute(element, 'points', newPoints);
+      this.starPoints = points;
     }
   }
 }

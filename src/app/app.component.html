@@ -9,6 +9,7 @@
     </div>
   </div>
   <div class="container-rectangle-controls" *ngIf="showRectangleControls">
+    <p>Editar Retângulo:</p>
     <div>
       <label for="horizontalBorder">Arredondar borda na horizontal</label>
       <input type="number" name="horizontalBorder" id="horizontalBorder" max="100" min="0" [(ngModel)]="horizontalBorder" (ngModelChange)="editRectangleBorder()"/>
@@ -20,6 +21,17 @@
     <div>
       <label for="fillRectangle">Escolha uma cor</label>
       <input type="color" name="fillRectangle" id="fillRectangle" [(ngModel)]="fillRectangle" (ngModelChange)="editRectangleColor()"/>
+    </div>
+  </div>
+  <div class="container-star-controls" *ngIf="showStarControls">
+    <p>Editar Estrela:</p>
+    <div>
+      <label for="fillStar">Escolha uma cor</label>
+      <input type="color" name="fillStar" id="fillStar" [(ngModel)]="fillStar" (ngModelChange)="editStarColor()"/>
+    </div>
+    <div>
+      <label for="starPoints">Número de pontas:</label>
+        <input type="number" id="starPoints" [min]="3" [max]="20" [value]="starPoints"(input)="editStarPoints($event)">
     </div>
   </div>
 </div>
