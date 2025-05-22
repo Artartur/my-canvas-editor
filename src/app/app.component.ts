@@ -14,6 +14,7 @@ export class AppComponent {
   private selectedPolyId: string | null = null;
   private selectedRectId: string | null = null;
 
+  private defaultStarPoints = 5;
   private elementsCounter = 0;
   private maxElements = 3;
   private polygonCounter = 0;
@@ -100,6 +101,10 @@ export class AppComponent {
       this.renderer.setStyle(poly, 'cursor', 'pointer');
       this.renderer.setStyle(poly, 'stroke', 'red');
       this.renderer.setStyle(poly, 'stroke-width', '3');
+
+      const pointsStr = poly.getAttribute('data-star-points');
+
+      this.starPoints = pointsStr ? parseInt(pointsStr) : this.defaultStarPoints;
     }
 
     this.showRectangleControls = false;
@@ -164,7 +169,7 @@ export class AppComponent {
       return;
     }
 
-    const points = numPoints || this.starPoints;
+    const points = numPoints || this.defaultStarPoints;
 
     let content = this.canvasControl.nativeElement.querySelector('svg');
 
@@ -185,6 +190,8 @@ export class AppComponent {
     const pointsStr = this.generateStarPoints(150, 150, points, 125, 50);
     this.renderer.setAttribute(polygon, 'points', pointsStr);
     this.renderer.setAttribute(polygon, 'transform', `scale(0.5)`);
+
+    this.renderer.setAttribute(polygon, 'data-star-points', points.toString());
 
     this.renderer.listen(polygon, 'click', (event) => {
       event.stopPropagation();
@@ -237,6 +244,8 @@ export class AppComponent {
     if (element) {
       const newPoints = this.generateStarPoints(150, 150, points, 125, 50);
       this.renderer.setAttribute(element, 'points', newPoints);
+      this.renderer.setAttribute(element, 'data-star-points', points.toString());
+
       this.starPoints = points;
     }
   }
