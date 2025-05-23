@@ -12,19 +12,23 @@ export class StarControlsComponent implements OnChanges {
 
   private defaultStarPoints = 5;
 
+  private defaultfillStar = '#000000';
+  private defaultStroke = '#000000';
+  private defaultStrokeWidth = '5';
+
   public fillStar = '#000000';
   public stroke = '#000000';
   public strokeWidth = '5';
 
-  public innerRadius: number = 50;
-  public outerRadius: number = 125;
+  public innerRadius = 50;
+  public outerRadius = 125;
   public starPoints = 5;
 
   constructor(private renderer: Renderer2, private selectService: SelectService) { }
 
   ngOnChanges() {
     if (this.selectedPolyId) {
-      this.updateControlsFromElement();
+      this.getElementProperties();
       this.selectedElement();
     }
   }
@@ -46,16 +50,25 @@ export class StarControlsComponent implements OnChanges {
     return result.trim();
   }
 
-  private selectedElement() {
-    this.selectService.selectElement(this.selectedPolyId as string);
-  }
-
-  private updateControlsFromElement() {
+  private getElementProperties() {
     const element = document.getElementById(this.selectedPolyId as string);
     if (element) {
       const pointsStr = element.getAttribute('data-star-points');
       this.starPoints = pointsStr ? parseInt(pointsStr) : this.defaultStarPoints;
+
+      const fill = element.getAttribute('fill');
+      this.fillStar = fill ? fill : this.defaultfillStar;
+
+      const stroke = element.getAttribute('stroke');
+      this.stroke = stroke ? stroke : this.defaultStroke;
+
+      const strokeWidth = element.getAttribute('stroke-width');
+      this.strokeWidth = strokeWidth ? strokeWidth : this.defaultStrokeWidth;
     }
+  }
+
+  private selectedElement() {
+    this.selectService.selectElement(this.selectedPolyId as string);
   }
 
   public editStarColor() {
