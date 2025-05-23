@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, Renderer2 } from '@angular/core';
+import { SelectService } from '../_services/select.service';
 
 @Component({
   selector: 'app-star-controls',
@@ -13,35 +14,12 @@ export class StarControlsComponent implements OnChanges {
   public starPoints = 5;
   private defaultStarPoints = 5;
 
-  constructor(private renderer: Renderer2) { }
+  constructor(private renderer: Renderer2, private selectService: SelectService) { }
 
   ngOnChanges() {
     if (this.selectedPolyId) {
       this.updateControlsFromElement();
-      this.highlightSelectedElement();
-    }
-  }
-
-  private updateControlsFromElement() {
-    const element = document.getElementById(this.selectedPolyId as string);
-    if (element) {
-      const pointsStr = element.getAttribute('data-star-points');
-      this.starPoints = pointsStr ? parseInt(pointsStr) : this.defaultStarPoints;
-    }
-  }
-
-  private highlightSelectedElement() {
-    const allPolygons = document.querySelectorAll('polygon');
-    allPolygons.forEach(poly => {
-      this.renderer.setStyle(poly, 'stroke', null);
-      this.renderer.setStyle(poly, 'stroke-width', null);
-    });
-
-    const element = document.getElementById(this.selectedPolyId as string);
-    if (element) {
-      this.renderer.setStyle(element, 'cursor', 'pointer');
-      this.renderer.setStyle(element, 'stroke', 'red');
-      this.renderer.setStyle(element, 'stroke-width', '3');
+      this.selectedElement();
     }
   }
 
@@ -60,6 +38,18 @@ export class StarControlsComponent implements OnChanges {
     }
 
     return result.trim();
+  }
+
+  private selectedElement() {
+    this.selectService.selectElement(this.selectedPolyId as string);
+  }
+
+  private updateControlsFromElement() {
+    const element = document.getElementById(this.selectedPolyId as string);
+    if (element) {
+      const pointsStr = element.getAttribute('data-star-points');
+      this.starPoints = pointsStr ? parseInt(pointsStr) : this.defaultStarPoints;
+    }
   }
 
   public editStarColor() {

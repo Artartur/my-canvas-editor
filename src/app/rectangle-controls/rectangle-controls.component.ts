@@ -1,4 +1,5 @@
 import { Component, Input, Renderer2 } from '@angular/core';
+import { SelectService } from '../_services/select.service';
 
 @Component({
   selector: 'app-rectangle-controls',
@@ -13,13 +14,17 @@ export class RectangleControlsComponent {
   public horizontalBorder = '0';
   public verticalBorder = '0';
 
-  constructor(private renderer: Renderer2) { }
+  constructor(private renderer: Renderer2, private selectService: SelectService) { }
 
   ngOnChanges() {
     if (this.selectedRectId) {
       this.updateControlsFromElement();
-      this.highlightSelectedElement();
+      this.selectedElement();
     }
+  }
+
+  private selectedElement() {
+    this.selectService.selectElement(this.selectedRectId as string);
   }
 
   private updateControlsFromElement() {
@@ -29,21 +34,6 @@ export class RectangleControlsComponent {
       const ry = element.getAttribute('ry') || '0';
       this.horizontalBorder = rx;
       this.verticalBorder = ry;
-    }
-  }
-
-  private highlightSelectedElement() {
-    const allRects = document.querySelectorAll('rect');
-    allRects.forEach(rect => {
-      this.renderer.setStyle(rect, 'stroke', null);
-      this.renderer.setStyle(rect, 'stroke-width', null);
-    });
-
-    const element = document.getElementById(this.selectedRectId as string);
-    if (element) {
-      this.renderer.setStyle(element, 'cursor', 'pointer');
-      this.renderer.setStyle(element, 'stroke', 'red');
-      this.renderer.setStyle(element, 'stroke-width', '3');
     }
   }
 
