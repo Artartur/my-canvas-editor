@@ -1,22 +1,22 @@
 <div class="container">
   <div class="container-content">
-    <app-canvas style="height: 100%; width: 100%;"
+    <app-canvas
+      style="height: 100%; width: 100%;"
       [canCreateElement]="canCreateNewElement()"
-      (elementCreated)="onElementCreated()"
       (canvasCleared)="onCanvasCleared()"
+      (elementCreated)="onElementCreated()"
       (rectangleSelected)="onRectangleSelected($event)"
       (starSelected)="onStarSelected($event)">
     </app-canvas>
-  <app-rectangle-controls
-    style="height: 100%;"
-    *ngIf="showRectangleControls"
-    [selectedRectId]="selectedRectId">
-  </app-rectangle-controls>
-  <app-star-controls
-    style="height: 100%;"
-    *ngIf="showStarControls"
-    [selectedPolyId]="selectedPolyId">
-  >
-  </app-star-controls>
+    <app-rectangle-controls
+      *ngIf="showRectangleControls"
+      style="height: 100%;"
+      [selectedRectId]="selectedRectId">
+    </app-rectangle-controls>
+    <app-star-controls
+      *ngIf="showStarControls"
+      style="height: 100%;"
+      [selectedPolyId]="selectedPolyId">
+    </app-star-controls>
   </div>
 </div>
