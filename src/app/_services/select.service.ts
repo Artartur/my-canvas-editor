@@ -22,8 +22,6 @@ export class SelectService {
     const element = document.getElementById(selectedId);
     if (element) {
       this.renderer.setStyle(element, 'cursor', 'pointer');
-      this.renderer.setStyle(element, 'stroke', 'red');
-      this.renderer.setStyle(element, 'stroke-width', '3');
     }
   }
 }
