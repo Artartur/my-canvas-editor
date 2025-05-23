@@ -13,7 +13,7 @@ Architecture: NgModules. It's an architecture I'm already used to working with. 
 - Run ```npm install -g @angular/cli```
 - Run ```npm install``` to install all dependencies
 - Run ```ng serve```
-- In your browser navigate to ```localhost:4200```
+- In your browser navigate to ```http://localhost:4200/```
 - Now, you can play
 
 ## Versions
