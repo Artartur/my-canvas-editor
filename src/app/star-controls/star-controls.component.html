@@ -8,4 +8,8 @@
     <label for="starPoints">Número de pontas:</label>
     <input type="number" id="starPoints" [min]="3" [max]="20" [value]="starPoints"(input)="editStarPoints($event)">
   </div>
+  <div>
+    <label for="outerRadius">Comprimento da ponta:</label>
+    <input type="range" id="outerRadius" [min]="100" [max]="160" [value]="outerRadius" (input)="editStarPointsLength($event)">
+  </div>
 </div>

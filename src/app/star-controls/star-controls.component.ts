@@ -10,9 +10,13 @@ import { SelectService } from '../_services/select.service';
 export class StarControlsComponent implements OnChanges {
   @Input() selectedPolyId: string | null = null;
 
-  public fillStar = '#000000';
-  public starPoints = 5;
   private defaultStarPoints = 5;
+
+  public fillStar = '#000000';
+
+  public innerRadius: number = 50;
+  public outerRadius: number = 125;
+  public starPoints = 5;
 
   constructor(private renderer: Renderer2, private selectService: SelectService) { }
 
@@ -23,12 +27,12 @@ export class StarControlsComponent implements OnChanges {
     }
   }
 
-  private generateStarPoints(centerX: number, centerY: number, points: number, outerRadius: number, innerRadius: number): string {
+  private generateStarPoints(centerX: number, centerY: number, points: number): string {
     let result = '';
     const angleStep = Math.PI / points;
 
     for (let i = 0; i < points * 2; i++) {
-      const radius = i % 2 === 0 ? outerRadius : innerRadius;
+      const radius = i % 2 === 0 ? this.outerRadius : this.innerRadius;
       const angle = i * angleStep;
 
       const x = centerX + radius * Math.sin(angle);
@@ -69,10 +73,24 @@ export class StarControlsComponent implements OnChanges {
 
     const element = document.getElementById(this.selectedPolyId);
     if (element) {
-      const newPoints = this.generateStarPoints(150, 150, points, 125, 50);
+      const newPoints = this.generateStarPoints(150, 150, points);
       this.renderer.setAttribute(element, 'points', newPoints);
       this.renderer.setAttribute(element, 'data-star-points', points.toString());
       this.starPoints = points;
+    }
+  }
+
+  public editStarPointsLength(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    this.outerRadius = +inputElement.value;
+
+    if (!this.selectedPolyId) return;
+
+    const element = document.getElementById(this.selectedPolyId);
+    if (element) {
+      const currentPoints = +(element.getAttribute('data-star-points') || this.defaultStarPoints);
+      const newPoints = this.generateStarPoints(150, 150, currentPoints);
+      this.renderer.setAttribute(element, 'points', newPoints);
     }
   }
 }
