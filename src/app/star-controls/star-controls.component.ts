@@ -13,6 +13,8 @@ export class StarControlsComponent implements OnChanges {
   private defaultStarPoints = 5;
 
   public fillStar = '#000000';
+  public stroke = '#000000';
+  public strokeWidth = '5';
 
   public innerRadius: number = 50;
   public outerRadius: number = 125;
@@ -91,6 +93,24 @@ export class StarControlsComponent implements OnChanges {
       const currentPoints = +(element.getAttribute('data-star-points') || this.defaultStarPoints);
       const newPoints = this.generateStarPoints(150, 150, currentPoints);
       this.renderer.setAttribute(element, 'points', newPoints);
+    }
+  }
+
+  public editStarStroke() {
+    if (!this.selectedPolyId) return;
+
+    const element = document.getElementById(this.selectedPolyId);
+    if (element) {
+      this.renderer.setAttribute(element, 'stroke', this.stroke);
+    }
+  }
+
+  public editStarStrokeWidth() {
+    if (!this.selectedPolyId) return;
+
+    const element = document.getElementById(this.selectedPolyId);
+    if (element) {
+      this.renderer.setAttribute(element, 'stroke-width', this.strokeWidth);
     }
   }
 }
