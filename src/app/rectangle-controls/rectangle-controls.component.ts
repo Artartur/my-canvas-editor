@@ -12,6 +12,8 @@ export class RectangleControlsComponent {
 
   public fillRectangle = '#000000';
   public horizontalBorder = '0';
+  public stroke = '#000000';
+  public strokeWidth = '5';
   public verticalBorder = '0';
 
   constructor(private renderer: Renderer2, private selectService: SelectService) { }
@@ -53,6 +55,24 @@ export class RectangleControlsComponent {
     const element = document.getElementById(this.selectedRectId);
     if (element) {
       this.renderer.setAttribute(element, 'fill', this.fillRectangle);
+    }
+  }
+
+  public editRectangleStrokeColor() {
+    if (!this.selectedRectId) return;
+
+    const element = document.getElementById(this.selectedRectId);
+    if (element) {
+      this.renderer.setAttribute(element, 'stroke', this.stroke);
+    }
+  }
+
+  public editRectangleStrokeWidth() {
+    if (!this.selectedRectId) return;
+
+    const element = document.getElementById(this.selectedRectId);
+    if (element) {
+      this.renderer.setAttribute(element, 'stroke-width', this.strokeWidth);
     }
   }
 }

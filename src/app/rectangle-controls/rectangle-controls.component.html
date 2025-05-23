@@ -1,15 +1,23 @@
 <div class="container-rectangle-controls">
   <p>Editar Retângulo:</p>
   <div>
-    <label for="horizontalBorder">Arredondar borda na horizontal</label>
+    <label for="horizontalBorder">Arredondar borda x:</label>
     <input type="range" name="horizontalBorder" id="horizontalBorder" [max]="100" [min]="0" [(ngModel)]="horizontalBorder" (ngModelChange)="editRectangleBorder()"/>
   </div>
   <div>
-    <label for="verticalBorder">Arredondar borda na vertical</label>
+    <label for="verticalBorder">Arredondar borda y:</label>
     <input type="range" name="verticalBorder" id="verticalBorder" [max]="100" [min]="0" [(ngModel)]="verticalBorder" (ngModelChange)="editRectangleBorder()"/>
   </div>
   <div>
-    <label for="fillRectangle">Escolha uma cor</label>
+    <label for="fillRectangle">Cor do retângulo: </label>
     <input type="color" name="fillRectangle" id="fillRectangle" [(ngModel)]="fillRectangle" (ngModelChange)="editRectangleColor()"/>
+  </div>
+  <div>
+    <label for="stroke">Cor da borda: </label>
+    <input type="color" name="stroke" id="stroke" [(ngModel)]="stroke" (ngModelChange)="editRectangleStrokeColor()"/>
+  </div>
+  <div *ngIf="stroke !== '#000000'">
+    <label for="strokeWidth">Tamanho da borda: </label>
+    <input type="range" name="strokeWidth" id="strokeWidth" [min]="2" [max]="20" [value]="strokeWidth" [(ngModel)]="strokeWidth" (ngModelChange)="editRectangleStrokeWidth()"/>
   </div>
 </div>
