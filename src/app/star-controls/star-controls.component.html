@@ -1,0 +1,11 @@
+<div class="container-star-controls">
+  <p>Editar Estrela:</p>
+  <div>
+    <label for="fillStar">Escolha uma cor</label>
+    <input type="color" name="fillStar" id="fillStar" [(ngModel)]="fillStar" (ngModelChange)="editStarColor()"/>
+  </div>
+  <div>
+    <label for="starPoints">Número de pontas:</label>
+    <input type="number" id="starPoints" [min]="3" [max]="20" [value]="starPoints"(input)="editStarPoints($event)">
+  </div>
+</div>
