@@ -2,9 +2,9 @@
 
 Developed by: Artur Souza (Artartur)
 
-Description: A canvas editor, where you can generate elements (stars or rectangles) and you can edit it, its borders, colors, incrise length points and number of points. Also you can clean all the board/canvas.
+Description: A canvas editor where you can generate elements (stars or rectangles) and edit them — including their borders, colors, length, and number of points. You can also clear the entire board/canvas.
 
-Architecture: NgModules. It's an architecture I'm already used to working with. It helps keep things organized and makes it easier to scale the project in the future, if needed. The choice of this architecture was mostly a matter of personal preference and experience with the modular approach.
+Architecture: NgModules. It's an architecture I'm already used to working with. It helps keep things organized and makes it easier to scale the project in the future, if needed. The choice of this architecture was mostly based on personal preference and prior experience with the modular approach.
 
 ## How to install and run
 
