@@ -23,7 +23,7 @@ Node: 20.13.1
 Package Manager: npm 10.5.2
 
 ## Project structure
-
+```
 ├── .editorconfig
 ├── .gitignore
 ├── .vscode
@@ -70,3 +70,4 @@ Package Manager: npm 10.5.2
 ├── tsconfig.json
 ├── tsconfig.spec.json
 └── yarn.lock
+```
