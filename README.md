@@ -18,9 +18,10 @@ Architecture: NgModules. It's an architecture I'm already used to working with. 
 
 ## Versions
 
-Angular CLI: 19.2.12
-Node: 20.13.1
-Package Manager: npm 10.5.2
+- Angular: 19.2
+- Angular CLI: 19.2.12
+- Node: 20.13.1
+- Package Manager: npm 10.5.2
 
 ## Project structure
 ```
